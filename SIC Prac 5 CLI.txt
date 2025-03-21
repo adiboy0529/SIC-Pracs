@@ -1,0 +1,75 @@
+Practical 5 CLI Commands
+
+R1:
+
+en
+conf t
+enable secret enpa55
+line console 0
+password conpa55
+login
+exit
+ip domain-name ccnasecurity.com
+username admin secret adminpa55
+line vty 0 4
+login local
+exit
+crypto key generate rsa
+(when prompt appears, instead of 512, type 1024)
+
+ex
+show version
+conf t
+
+license boot module c1900 technology-package securityk9
+type yes
+
+ex
+reload
+
+type conpa55 for console access
+then enpa55 for R1# to appear
+
+zone security terminal
+
+conf t
+zone security internal
+ex
+zone security external
+ex
+ex
+show version
+
+conf t
+ip access-list extended 101
+permit ip 192.168.0.0 0.0.0.255 any
+exit
+
+class-map type inspect match-all 101
+match access-group name 101
+exit
+
+policy-map type inspect 101
+class type inspect 101
+inspect
+exit
+exit
+
+zone-pair security 101 source internal destination external
+service-policy type inspect 101
+ex
+interface g0/0
+zone-member security internal
+ex
+interface g0/1
+zone-member security external
+ex
+ex
+
+copy running-config Startup-config
+
+[press enter when "?" appears]
+
+go to PC-C → Desktop → Command Prompt → Ping IP Address 10.10.10.2
+
+then click on Server → Desktop → Command Prompt → Ping IP Address 192.168.0.2

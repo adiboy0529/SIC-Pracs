@@ -1,0 +1,84 @@
+Practical 7 CLI Commands
+
+1). Configure Root Bridge
+
+Go to Central → CLI → en → ciscoenpa55 (password)
+show spanning-tree
+
+
+go to SW-1 → CLI → en → ciscoenpa55
+show spanning-tree
+
+go to Central → CLI 
+
+en, followed by password 
+
+conf t
+
+spanning-tree vlan1 root primary
+do show spann
+
+go to SW-1 → CLI → en → ciscoenpa55
+
+spanning-tree vlan1 root secondary
+do show spann
+
+
+2). Protect against STP Attacks
+
+go to SW-A > CLI > enter commands
+
+en, followed by password
+
+conf t
+
+int range f0/1-4
+switchport mode access
+spanning-tree portfast
+spanning-tree bpduguard enable
+
+
+go to SW-1 > CLI > enter commands
+
+en, followed by password
+conf t
+
+int range f0/23-24
+spanning-tree guard root
+
+similarly, go to SW-2 > CLI > enter commands
+en, followed by password
+conf t
+
+int range f0/23-24
+spanning-tree guard root
+
+3). Configure Port Security and Disable Unused Ports
+
+go to SW-A > CLI > enter commands
+
+int range f0/1-4
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+
+go to SW-B > CLI > enter commands
+switchport port-security
+switchport port-security maximum 2
+switchport port-security mac-address sticky
+
+press ctrl + z, and then enter command
+
+show port-security int f0/1
+
+then disable unused ports
+
+in SW-A
+conf t
+int range f0/5-22
+shutdown
+
+in SW-B
+conf t
+int range f0/5-22
+shutdown

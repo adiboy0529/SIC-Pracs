@@ -1,0 +1,64 @@
+Practical 2 CLI Commands
+
+A). Local User Account Creation and AAA Authentication
+
+OSPF config steps:
+
+R1: 
+
+line vty 0 4
+password admin
+login
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.255 area 0
+
+R2:
+
+line vty 0 4
+password admin
+login
+router ospf 2
+network 192.168.2.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.255 area 0
+network 10.2.2.0 0.0.0.255 area 0
+
+R3:
+
+line vty 0 4
+password admin
+login
+router ospf 3
+network 192.168.3.0 0.0.0.255 area 0
+network 10.2.2.0 0.0.0.255 area 0
+
+
+AAA Authentication steps:
+
+R1:
+
+username Admin secret adminpa55
+aaa new-model
+aaa authentication login default local
+line console 0
+login authentication default
+end
+exit
+
+Press enter, then you'll write username and password mentioned above during creation.
+
+then you'll see something like "R1>"
+
+commands are:
+en
+conf t
+ip domain-name ccnasecurity.com
+crypto key generate rsa
+Message shows like this: "How many bits in the modulus [512] :  ", write 1024
+aaa authentication login SSH-LOGIN local
+line vty 0 4
+login authentication SSH-LOGIN
+transport input ssh
+end
+
+go to PC-A command prompt, then type this "ssh -l Admin1 192.168.1.1", then use the password as ciscosshpa55

@@ -1,0 +1,100 @@
+Practical 1 CLI commands
+
+A). Configuring OSPF 
+
+in Router 1
+
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.3 area 0
+
+in Router 2
+
+router ospf 2
+network 10.1.1.0 0.0.0.3 area 0
+network 10.2.2.0 0.0.0.3 area 0
+
+in Router 3
+
+router ospf 3
+network 192.168.3.0 0.0.0.255 area 0
+network 10.2.2.0 0.0.0.3 area 0
+
+
+
+B). MD5 Authentication
+
+in Router 1
+
+router ospf 1
+area 0 authentication message-digest
+interface s0/0/0
+ip ospf message-digest key 1 md5 MD5pa55
+
+in Router 2
+
+router ospf 2
+area 0 authentication message-digest
+interface s0/0/0
+ip ospf message-digest key 1 md5 MD5pa55
+interface s0/0/1
+ip ospf message-digest key 1 md5 MD5pa55
+
+in Router 3
+
+router ospf 3
+area 0 authentication message-digest
+interface s0/0/0
+ip ospf message-digest key 1 md5 MD5pa55
+
+show this command in all the Router CLIs to check for MD5 configuration : show ip ospf interface 
+
+
+
+
+C). NTP Authentication
+
+in PC-A, go to services tab and click NTP to check if NTP service is On or Off. Enable NTP Authentication by clicking Enable under Authentication, then choose date and time different from current time. then set key as 1 and password as NTPpa55.
+
+then, in each router, go to CLI and write these commands:
+
+ntp server 192.168.1.5
+ntp update-calendar
+ntp authenticate
+ntp authentication-key 1 md5 NTPpa55
+service timestamps log datetime rsec
+
+after that, for logging, go to PC-B, then check if syslog is enabled. if not, go to each router's CLI and write the command "logging host 192.168.1.6", and for output, go to each router and type "show logging"
+
+
+
+D). SSH Authentication
+
+go to R3 CLI and write the following commands:
+
+ip domain-name ccnasecurity.com
+username SSHadmin privilege 15 secret ciscosshpa55
+line vty 0 4
+login local
+transport input ssh
+crypto key zeroize rsa
+crypto key generate rsa (after that, type 1024)
+
+after that,
+ex
+show ip ssh
+
+then close and go to config again and type this
+
+ip ssh time-out 90
+ip ssh authentication-retries 2
+ip ssh version 2
+ex
+show ip ssh
+
+then go to PC-C → Desktop → Command Prompt → type this command "telnet 192.168.3.1" to verify that input method is SSH
+
+then type ssh -l SSHadmin 192.168.3.1, password is ciscosshpa55
+again type show ip ssh when logged in successfully
+
+we can also connect R2 with R3 from R2 CLI using command ssh -v 2 -l SSHadmin 10.2.2.1 without R2(config), just at R2. then type password as ciscosshpa55

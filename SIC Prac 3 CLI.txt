@@ -1,0 +1,32 @@
+Practical 3 CLI Commands
+
+Router0 CLI
+
+en
+conf t
+access-list 100 permit tcp 172.22.34.64 0.0.0.31 host 172.22.34.62 eq ftp
+access-list 100 permit icmp 172.22.32.64 0.0.0.31 host 172.22.34.62
+interface g0/0
+ip access-group 100 in
+ex
+ip access-list extended HTTP-ONLY
+permit tcp 172.22.34.96 0.0.0.15 host 172.22.34.62 eq www
+permit icmp 172.22.34.96 0.0.0.15 host 172.22.34.62
+en
+interface g0/1
+ip access-group HTTP-ONLY in
+
+verification of ftp on PC-A
+
+type on command prompt
+
+ftp 172.22.34.62
+
+username: cisco
+password: cisco
+
+
+type similarly on PC-B, it should fail
+
+
+for www response, go to PC-B and type "http://172.22.34.62", it should return site. similarly do it on PC-A, it should fail.

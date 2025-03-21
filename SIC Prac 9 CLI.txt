@@ -1,0 +1,86 @@
+Practical 9 CLI Commands
+
+for R1, R2, and R3
+en
+conf t
+enable secret enpa55
+line console 0
+password conpa55
+login
+exit
+ip domain-name ccnasecurity.com
+username admin secret adminpa55
+line vty 0 4
+login local
+exit
+crypto key generate rsa
+1024
+
+R1 OSPF
+
+router ospf 1
+network 192.168.1.0 0.0.0.255 area 0
+network 10.1.1.0 0.0.0.3 area 0
+
+R2 OSPF
+
+router ospf 1
+network 192.168.2.0 0.0.0.255 area 0
+network 10.2.2.0 0.0.0.3 area 0
+network 10.1.1.0 0.0.0.3 area 0
+
+R3 OSPF
+
+router ospf 1
+network 10.2.2.0 0.0.0.3 area 0
+network 192.168.3.0 0.0.0.255 area 0
+
+(password for accessing console is conpa55, for accessing en, it's enpa55)
+
+2). Enable Security technology package
+
+go to R1 CLI
+
+type
+license boot module c1900 technology-package securityk9
+then type yes
+
+then reload
+yes
+
+
+do the same for R3 CLI
+
+
+3). IPsec VPN configuration on R1 to R3
+
+go to R1, type these commands
+
+access-list 110 permit ip 192.168.1.0 0.0.0.255 192.168.3.0 0.0.0.255
+crpyto isakmp policy 10
+encryption aes 256
+authentication pre-share
+group 5
+exit
+crpyto isakmp key vpnpa55 address 10.2.2.2
+crypto ipsec transform-set VPN-SET esp-aes esp-sha-hmac
+crpyto map VPN-MAP 10 ipsec-isakmp
+description VPN connection to R3
+set peer 10.2.2.2
+set transform-set VPN-SET
+match address 110
+exit
+interface se0/0/0
+crypto map VPN-MAP
+
+then, do the same for R3
+
+after that, go to R1 (password for accessing console is conpa55, for accessing en, it's enpa55), and type this command after doing en and conf t 
+
+the command is "show crypto ipsec sa"
+
+similarly, do for R3
+
+then Ping PC-A from PC-C
+
+which is, "ping 192.168.1.3"
