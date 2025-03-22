@@ -62,3 +62,49 @@ transport input ssh
 end
 
 go to PC-A command prompt, then type this "ssh -l Admin1 192.168.1.1", then use the password as ciscosshpa55
+
+
+
+B). Verify Local AAA Authentication from Router console and PC-A Client
+
+go to R2 CLI and write this command: "username Admin2 secret admin2pa55"
+
+then go to TACACS+ Server (which you named in topology) > Services > AAA > fill out fields in Network Configuration
+
+client name: R3, client IP: 192.168.2.1, Secret: tacacspa55, Server Type: Tacacs
+
+below it, fill user setup
+
+Username: Admin2, Password: admin2pa55
+
+again to R2 CLI, then write the following commands
+
+aaa new-model
+aaa authentication login default group tacacs+ local
+line console 0
+login authentication default
+end
+check for success by exiting (typing "ex") and logging in to console to enable "R2>"
+
+then go to R3 CLI
+
+username Admin3 secret admin3pa55
+
+go to Radius Server (one you named in topology) and go to Services > AAA > Fill out as below
+
+client name: R3, client IP: 192.168.3.1, Secret: radiuspa55, Server Type: Radius
+
+below it, fill user setup:
+
+Username: Admin3, Password: admin3pa55
+
+again to R3 CLI, then write the following commands
+
+aaa new-model
+aaa authentication login default group radius local
+line console 0
+login authentication default
+end
+exit
+
+check for success by exiting (typing "ex") and logging in to console to enable "R3>"
