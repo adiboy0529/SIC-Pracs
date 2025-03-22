@@ -67,7 +67,7 @@ switchport port-security
 switchport port-security maximum 2
 switchport port-security mac-address sticky
 
-press ctrl + z, and then enter command
+press ctrl + z, and then enter command on both SW-A and SW-B
 
 show port-security int f0/1
 
